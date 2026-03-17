@@ -138,7 +138,8 @@ build_windows.bat
 
 - **Link to AliExpress Store**：<https://www.aliexpress.com/item/1005009387100041.html>
   
-  ![image-20260317164830819](C:\Users\C\AppData\Roaming\Typora\typora-user-images\image-20260317164830819.png)
+  ![58be2b59d12319b2687ea946c54bc9ab](https://github.com/user-attachments/assets/7d3adc97-109b-4dd3-bb4a-bb3d80d8bc18)
+
 
 如需更多使用指导或固件更新，请关注本仓库的 `doc/` 文档更新，或在店铺页面联系商家技术支持。
 
