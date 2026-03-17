@@ -7,10 +7,10 @@ This project is based on the open-source `universal-silabs-flasher` project with
 ## Repository Layout
 
 - **`doc/`** – Environment setup, build guides, GUI usage manuals and future operational guides  
-  - Build & environment (Chinese)：[`doc/BUILD_CN.md`](doc/BUILD_CN.md)  
-  - Build & environment (English)：[`doc/BUILD_EN.md`](doc/BUILD_EN.md)  
-  - GUI User Guide (Chinese)：[`doc/Inswift_Silabs_Flasher_GUI_CN.md`](doc/Inswift_Silabs_Flasher_GUI_CN.md)  
-  - GUI User Guide (English)：[`doc/Inswift_Silabs_Flasher_GUI_EN.md`](doc/Inswift_Silabs_Flasher_GUI_EN.md)
+  - Build & environment (Chinese): [`doc/BUILD_CN.md`](doc/BUILD_CN.md)  
+  - Build & environment (English): [`doc/BUILD_EN.md`](doc/BUILD_EN.md)  
+  - GUI User Guide (Chinese): [`doc/Inswift_Silabs_Flasher_GUI_CN.md`](doc/Inswift_Silabs_Flasher_GUI_CN.md)  
+  - GUI User Guide (English): [`doc/Inswift_Silabs_Flasher_GUI_EN.md`](doc/Inswift_Silabs_Flasher_GUI_EN.md)
 
 - **`firmware_bin/`** – Pre-built firmware images for production/maintenance flashing, organized by protocol and platform.  
   All firmware files are in `.gbl` format, grouped as:
@@ -30,7 +30,7 @@ This project is based on the open-source `universal-silabs-flasher` project with
   - `build_windows.bat` – One-click Windows build script using PyInstaller  
   - `InswiftSilabsFlasher.spec` – PyInstaller spec file (data files and hidden imports, etc.)  
   - `requirements_gui.txt` – Dependency list for the GUI build (including `zigpy`, `bellows`, `pyserial-asyncio-fast`, `Pillow`, etc.)  
-  - `pyproject.toml` – Project metadata and dependencies; `project.urls.repository` points to the upstream repo `https://github.com/NabuCasa/universal-silabs-flasher`.
+  - `pyproject.toml` – Project metadata and dependencies; `project.urls.repository` points to the upstream repository: [NabuCasa/universal-silabs-flasher (upstream)](https://github.com/NabuCasa/universal-silabs-flasher).
 
 - **`tools/`** – Prebuilt executable tools  
   - e.g. `tools/InswiftSilabsFlasher.exe` – ready-to-use GUI flasher for end users.
@@ -94,8 +94,8 @@ Typical flashing workflow:
 
 For detailed button descriptions, progress behavior, and advanced features such as writing IEEE addresses, please refer to:
 
-- GUI User Guide (Chinese)：[`doc/Inswift_Silabs_Flasher_GUI_CN.md`](doc/Inswift_Silabs_Flasher_GUI_CN.md)  
-- GUI User Guide (English)：[`doc/Inswift_Silabs_Flasher_GUI_EN.md`](doc/Inswift_Silabs_Flasher_GUI_EN.md)
+- GUI User Guide (Chinese): [`doc/Inswift_Silabs_Flasher_GUI_CN.md`](doc/Inswift_Silabs_Flasher_GUI_CN.md)  
+- GUI User Guide (English): [`doc/Inswift_Silabs_Flasher_GUI_EN.md`](doc/Inswift_Silabs_Flasher_GUI_EN.md)
 
 ## Firmware Directory & Versioning
 
@@ -124,7 +124,7 @@ Before flashing, always confirm:
 ## Upstream Project & Licensing
 
 - The core flashing logic is derived from the open-source project **Universal Silabs Flasher**:  
-  - GitHub: `https://github.com/NabuCasa/universal-silabs-flasher`
+  - GitHub: [NabuCasa/universal-silabs-flasher (upstream)](https://github.com/NabuCasa/universal-silabs-flasher)
 
 - This repository adds:  
   - A localized Windows GUI (`src/gui_app.py`, Tkinter-based)  
@@ -136,13 +136,11 @@ For license details, please refer to the upstream repository and this project’
 
 ## Purchase & Support
 
-We provide the full range of Inswift dongle products on AliExpress, ready to be used with this tool:
+Inswift dongle products are available on AliExpress and can be used with this tool out of the box:
 
-- **We use our entire range of dongle products, AliExpress collects inswift dongle**  
+- **AliExpress Store**: [Inswift Official Store](https://www.aliexpress.com/store/1104754391?spm=a2g0o.store_pc_home.pcShopHead_2012127151152.0)
 
-- **Link to AliExpress Store**: <https://www.aliexpress.com/item/1005009387100041.html>
-
-![58be2b59d12319b2687ea946c54bc9ab](https://github.com/user-attachments/assets/071c0c85-5bfe-46ff-87a0-144435ca8c0b)
+![Inswift products (AliExpress)](https://github.com/user-attachments/assets/071c0c85-5bfe-46ff-87a0-144435ca8c0b)
 
 
 For additional guidance or firmware updates, please watch for updates under the `doc/` directory or contact technical support via the AliExpress store.
