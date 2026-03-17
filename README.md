@@ -142,7 +142,8 @@ We provide the full range of Inswift dongle products on AliExpress, ready to be 
 
 - **Link to AliExpress Store**: <https://www.aliexpress.com/item/1005009387100041.html>
 
-  ![image-20260317164603244](C:\Users\C\AppData\Roaming\Typora\typora-user-images\image-20260317164603244.png)
+![58be2b59d12319b2687ea946c54bc9ab](https://github.com/user-attachments/assets/071c0c85-5bfe-46ff-87a0-144435ca8c0b)
+
 
 For additional guidance or firmware updates, please watch for updates under the `doc/` directory or contact technical support via the AliExpress store.
 
