@@ -1,0 +1,14 @@
+# GUI build dependencies for InswiftSilabsFlasher / UniversalSilabsFlasher
+# Use: pip install -r requirements_gui.txt
+# Python >= 3.9
+
+aiohttp
+click>=8.0.0
+zigpy>=0.70.0
+crc
+bellows>=0.42.0
+coloredlogs
+typing_extensions
+pyserial-asyncio-fast
+pyserial
+Pillow

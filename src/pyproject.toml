@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel", "setuptools-git-versioning>=2.0,<3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "universal-silabs-flasher"
+dynamic = ["version"]
+description = "Tool to flash firmware onto any Silicon Labs radio running EmberZNet, CPC multi-PAN, or just a bare Gecko Bootloader"
+urls = {repository = "https://github.com/NabuCasa/universal-silabs-flasher"}
+authors = [
+    {name = "Puddly", email = "puddly3@gmail.com"}
+]
+readme = "README.md"
+license = {text = "GPL-3.0"}
+requires-python = ">=3.9"
+dependencies = [
+    "aiohttp",  # Explicit dependency until compatibility with async-timeout is resolved
+    "click>=8.0.0",
+    "zigpy>=0.70.0",
+    "crc",
+    "bellows>=0.42.0",
+    'gpiod; platform_system=="Linux"',
+    "coloredlogs",
+    'async-timeout; python_version<"3.11"',
+    "typing_extensions",
+    "pyserial-asyncio-fast",
+]
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "tests.*"]
+
+[project.optional-dependencies]
+testing = [
+    "pytest>=7.3.1",
+    "pytest-asyncio>=0.21.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-mock>=3.10.0",
+    "pytest-cov>=4.1.0",
+    "pytest-github-actions-annotate-failures",
+]
+
+[tool.setuptools-git-versioning]
+enabled = true
+
+[project.scripts]
+universal-silabs-flasher = "universal_silabs_flasher.__main__:main"
+
+[tool.codespell]
+ignore-words-list = ["zigpy", "hass"]
+skip = ["./.*", "pyproject.toml"]
+quiet-level = 2
+
+[tool.pytest.ini_options]
+addopts = "--showlocals --verbose"
+testpaths = ["tests"]
+timeout = 20
+log_format = "%(asctime)s.%(msecs)03d %(levelname)s %(message)s"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+asyncio_mode = "auto"
+
+[tool.mypy]
+check_untyped_defs = true
+show_error_codes = true
+show_error_context = true
+disable_error_code = [
+	"attr-defined",
+	"arg-type",
+]
+
+
+[tool.ruff]
+src = ["universal_silabs_flasher", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "F", # Pyflakes
+    "E", # Pycodestyle
+    "W",
+    "I", # isort
+    "TRY", # tryceratops
+    "UP", # pyupgrade
+    "W", # pycodestyle
+]
+
+ignore = [
+    "TRY003",
+]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = [
+    "universal_silabs_flasher",
+    "tests",
+]
+combine-as-imports = true
+split-on-trailing-comma = false
+
+[tool.coverage.run]
+source = ["universal_silabs_flasher"]
