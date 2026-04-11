@@ -36,7 +36,7 @@ Choose the appropriate probe method for your device type:
 | router | Zigbee Router | 115200 |
 | bootloader | Bootloader mode | 115200 |
 | cpc | CPC Multi-PAN | 460800 |
-| spinel | Spinel protocol | 460800 |
+| spinel | RCP OPENTHREAD | 460800 |
 
 ### 5. Start Flashing
 
