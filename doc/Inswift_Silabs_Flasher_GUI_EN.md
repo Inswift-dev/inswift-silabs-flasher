@@ -35,7 +35,7 @@ Choose the appropriate probe method for your device type:
 | ezsp | EmberZNet protocol (Zigbee NCP) | 115200 |
 | router | Zigbee Router | 115200 |
 | bootloader | Bootloader mode | 115200 |
-| cpc | CPC Multi-PAN | 460800 |
+| cpc | CPC Multi-PAN | 115200 |
 | spinel | RCP OPENTHREAD | 460800 |
 
 ### 5. Start Flashing

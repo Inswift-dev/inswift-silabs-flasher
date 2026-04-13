@@ -47,7 +47,7 @@ DEFAULT_BAUDRATES = {
     ApplicationType.EZSP: [115200, 460800],
     ApplicationType.SPINEL: [460800],
     ApplicationType.ROUTER: [115200],
-    ApplicationType.CPC: [460800, 115200, 230400],
+    ApplicationType.CPC: [115200, 460800, 230400],
 }
 
 

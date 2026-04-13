@@ -5,7 +5,7 @@ a = Analysis(
     ['gui_app.py'],
     pathex=[],
     binaries=[],
-    datas=[('universal_silabs_flasher', 'universal_silabs_flasher'), ('logo.png', '.')],
+    datas=[('universal_silabs_flasher', 'universal_silabs_flasher')],
     hiddenimports=['pyserial_asyncio_fast', 'zigpy.types', 'zigpy.serial', 'coloredlogs', 'PIL._tkinter_finder'],
     hookspath=[],
     hooksconfig={},

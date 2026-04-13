@@ -35,7 +35,7 @@
 | ezsp | EmberZNet协议（Zigbee NCP） | 115200 |
 | router | Zigbee Router | 115200 |
 | bootloader | 引导模式 | 115200 |
-| cpc | CPC Multi-PAN | 460800 |
+| cpc | CPC Multi-PAN | 115200 |
 | spinel | RCP OPENTHREAD | 460800 |
 
 ### 5. 开始烧录

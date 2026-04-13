@@ -50,7 +50,7 @@ class FlasherGUI:
             "ezsp": "115200",
             "router": "115200",
             "bootloader": "115200",
-            "cpc": "460800",
+            "cpc": "115200",
             "spinel": "460800",
         }
         
