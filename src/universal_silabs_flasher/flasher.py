@@ -433,10 +433,29 @@ class Flasher:
         data = pad_to_multiple(data, XMODEM_BLOCK_SIZE, b"\xff")
 
         async with self._connect_gecko_bootloader(self.bootloader_baudrate) as gecko:
-            # Wait for bootloader to be ready after entering bootloader mode
-            # Some devices need time to display the menu
-            await asyncio.sleep(0.5)
-            await gecko.probe()
+            # Give the bootloader a short moment to settle after mode switch.
+            await asyncio.sleep(0.3)
+
+            # Some adapters need one or two retries before the bootloader menu
+            # becomes responsive after the serial port is reopened.
+            max_probe_attempts = 3
+            for attempt in range(1, max_probe_attempts + 1):
+                try:
+                    await gecko.probe()
+                    break
+                except asyncio.TimeoutError:
+                    if attempt >= max_probe_attempts:
+                        raise
+
+                    retry_delay = 0.25 * attempt
+                    _LOGGER.warning(
+                        "Bootloader probe attempt %d/%d timed out, retrying in %.2fs",
+                        attempt,
+                        max_probe_attempts,
+                        retry_delay,
+                    )
+                    await asyncio.sleep(retry_delay)
+
             await gecko.upload_firmware(data, progress_callback=progress_callback)
 
             if run_firmware:

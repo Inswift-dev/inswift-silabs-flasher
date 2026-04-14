@@ -23,7 +23,7 @@ except ImportError:
 
 # 导入烧录相关的模块
 from universal_silabs_flasher.flasher import Flasher
-from universal_silabs_flasher.const import ApplicationType, DEFAULT_BAUDRATES
+from universal_silabs_flasher.const import ApplicationType, DEFAULT_BAUDRATES, ResetTarget
 import zigpy.types
 
 # 配置日志
@@ -39,7 +39,6 @@ class FlasherGUI:
         # 变量
         self.firmware_path = tk.StringVar()
         self.device_port = tk.StringVar(value="")  # 初始为空，等待扫描后自动选择
-        self.probe_method = tk.StringVar(value="ezsp")  # 默认使用ezsp
         self.ieee_address = tk.StringVar(value="")  # IEEE地址
         self.force_write_ieee = tk.BooleanVar(value=False)  # 强制写入IEEE地址
         
@@ -204,15 +203,12 @@ class FlasherGUI:
         refresh_btn = ttk.Button(port_frame, text="刷新", command=self.scan_ports, width=8)
         refresh_btn.grid(row=0, column=1)
         
-        # Probe Method选择
-        ttk.Label(main_frame, text="探测方法:").grid(row=4, column=0, sticky=tk.W, pady=5)
-        probe_frame = ttk.Frame(main_frame)
-        probe_frame.grid(row=4, column=1, sticky=tk.W, padx=(10, 0), pady=5)
-        
-        probe_combo = ttk.Combobox(probe_frame, textvariable=self.probe_method, 
-                                   state="readonly", width=20)
-        probe_combo['values'] = ("ezsp", "router", "bootloader", "cpc", "spinel")
-        probe_combo.grid(row=0, column=0)
+        # 设备类型探测说明（独立功能，不参与烧录流程）
+        ttk.Label(
+            main_frame,
+            text="设备类型探测顺序: EZSP -> ROUTER -> RCP(SPINEL) -> CPC",
+            foreground="gray"
+        ).grid(row=4, column=0, columnspan=3, sticky=tk.W, pady=5)
         
         # 自动扫描串口
         self.scan_ports()
@@ -285,6 +281,8 @@ class FlasherGUI:
         
         self.start_button = ttk.Button(button_frame, text="开始烧录", command=self.start_flashing, width=20)
         self.start_button.pack(side=tk.LEFT, padx=10)
+        self.probe_button = ttk.Button(button_frame, text="探测设备类型", command=self.start_probe, width=20)
+        self.probe_button.pack(side=tk.LEFT, padx=10)
         
         ttk.Button(button_frame, text="清空日志", command=self.clear_log, width=20).pack(side=tk.LEFT, padx=10)
         ttk.Button(button_frame, text="退出", command=self.root.quit, width=20).pack(side=tk.LEFT, padx=10)
@@ -535,6 +533,7 @@ class FlasherGUI:
         # 启动烧录线程
         self.is_running = True
         self.start_button.config(state="disabled")
+        self.probe_button.config(state="disabled")
         self.clear_log()
         self.update_progress(0, "准备开始...")
         
@@ -551,6 +550,86 @@ class FlasherGUI:
         finally:
             self.is_running = False
             self.start_button.config(state="normal")
+            self.probe_button.config(state="normal")
+
+    def start_probe(self):
+        """开始设备类型探测（只探测，不烧录）"""
+        if self.is_running:
+            messagebox.showwarning("警告", "其他任务正在运行中，请等待完成")
+            return
+
+        if not self.device_port.get():
+            messagebox.showerror("错误", "请选择设备端口")
+            return
+
+        self.is_running = True
+        self.start_button.config(state="disabled")
+        self.probe_button.config(state="disabled")
+        self.clear_log()
+        self.update_progress(0, "准备探测...")
+        threading.Thread(target=self.run_probe, daemon=True).start()
+
+    def run_probe(self):
+        """在后台线程中运行设备类型探测"""
+        try:
+            asyncio.run(self.async_probe())
+        except Exception as e:
+            self.log(f"探测失败: {str(e)}")
+            import traceback
+            self.log(f"错误详情:\n{traceback.format_exc()}")
+        finally:
+            self.is_running = False
+            self.start_button.config(state="normal")
+            self.probe_button.config(state="normal")
+
+    async def async_probe(self):
+        """异步设备类型探测函数（只探测，不进入烧录）"""
+        device = self.device_port.get()
+        self.log("开始设备类型探测...")
+        self.log(f"连接设备: {device}")
+        self.log("探测顺序: EZSP -> ROUTER -> RCP(SPINEL) -> CPC")
+
+        probe_baudrates = {
+            ApplicationType.GECKO_BOOTLOADER: [115200],
+            ApplicationType.EZSP: [115200],
+            ApplicationType.ROUTER: [115200],
+            ApplicationType.SPINEL: [460800],
+            ApplicationType.CPC: [115200],
+        }
+
+        flasher = Flasher(
+            device=device,
+            baudrates=probe_baudrates,
+            probe_methods=(
+                ApplicationType.EZSP,
+                ApplicationType.ROUTER,
+                ApplicationType.SPINEL,
+                ApplicationType.CPC,
+            ),
+            bootloader_reset=(),  # 探测只探测，不触发复位
+        )
+
+        try:
+            await flasher.probe_app_type(
+                types=[
+                    ApplicationType.EZSP,
+                    ApplicationType.ROUTER,
+                    ApplicationType.SPINEL,
+                    ApplicationType.CPC,
+                ]
+            )
+        except Exception as e:
+            self.update_progress(0, "探测失败")
+            self.log(f"设备类型探测失败: {e}")
+            return
+
+        self.update_progress(100, "探测完成")
+        self.log(f"检测到设备类型: {flasher.app_type}")
+        if flasher.app_version:
+            self.log(f"当前固件版本: {flasher.app_version}")
+        if flasher.app_baudrate:
+            self.log(f"应用波特率: {flasher.app_baudrate}")
+        self.log("设备类型探测完成（未执行烧录）")
     
     async def async_flash(self):
         """异步烧录函数"""
@@ -596,181 +675,51 @@ class FlasherGUI:
         
         # 创建Flasher实例
         device = self.device_port.get()
-        probe_method_str = self.probe_method.get()
-        
-        # 转换probe_method字符串为ApplicationType
-        probe_method_map = {
-            "ezsp": ApplicationType.EZSP,
-            "router": ApplicationType.ROUTER,
-            "bootloader": ApplicationType.GECKO_BOOTLOADER,
-            "cpc": ApplicationType.CPC,
-            "spinel": ApplicationType.SPINEL,
-        }
-        probe_method_type = probe_method_map.get(probe_method_str, ApplicationType.EZSP)
-        
-        # 根据探测方法自动设置默认波特率
+
+        # 烧录使用固定波特率配置：SPINEL 为 460800，其余为 115200
         baudrates = DEFAULT_BAUDRATES.copy()
-        default_baudrate = int(self.default_baudrates.get(probe_method_str, "115200"))
-        baudrates[probe_method_type] = [default_baudrate]
-        self.log(f"使用默认波特率: {default_baudrate} (探测方法: {probe_method_str})")
-        
-        # 创建Flasher，只探测指定的类型
+        baudrates[ApplicationType.GECKO_BOOTLOADER] = [115200]
+        baudrates[ApplicationType.EZSP] = [115200]
+        baudrates[ApplicationType.ROUTER] = [115200]
+        baudrates[ApplicationType.CPC] = [115200]
+        baudrates[ApplicationType.SPINEL] = [460800]
+
+        # 创建Flasher：烧录流程不再由用户选择探测方法
         flasher = Flasher(
             device=device,
             baudrates=baudrates,
-            probe_methods=(probe_method_type,),
-            bootloader_reset=(),  # 不使用reset方法
+            probe_methods=(
+                ApplicationType.EZSP,
+                ApplicationType.ROUTER,
+                ApplicationType.SPINEL,
+                ApplicationType.CPC,
+            ),
+            bootloader_reset=(ResetTarget.RTS_DTR,),
         )
         
         self.log(f"连接设备: {device}")
-        self.log(f"探测方法: {probe_method_str}")
-        self.log(f"波特率: {baudrates[probe_method_type]}")
-        
-        # 探测设备
-        self.log("探测设备类型...")
+
+        self.log("烧录流程不执行设备类型探测，直接进入引导模式")
         try:
-            await flasher.probe_app_type(types=[probe_method_type])
-        except RuntimeError as e:
-            error_msg = str(e)
-            self.log(f"设备探测失败: {error_msg}")
-            
-            # 如果探测失败，提供更友好的错误提示和解决方案
-            self.log("")
-            self.log("=" * 60)
-            self.log("设备探测失败 - 故障排除指南")
-            self.log("=" * 60)
-            
-            if probe_method_type == ApplicationType.GECKO_BOOTLOADER:
-                # Bootloader模式探测失败 - 尝试硬件复位
-                self.log("")
-                self.log("检测到：引导模式探测失败")
-                self.log("")
-                self.log("正在尝试使用RTS/DTR硬件复位强制进入引导模式...")
-                self.log("")
-                
-                try:
-                    from universal_silabs_flasher.const import ResetTarget
-                    # 尝试使用RTS/DTR硬件复位
-                    await flasher.trigger_bootloader(ResetTarget.RTS_DTR)
-                    await asyncio.sleep(1.0)  # 给设备时间进入引导模式
-                    
-                    # 再次尝试探测引导模式
-                    self.log("硬件复位完成，重新探测引导模式...")
-                    try:
-                        await flasher.probe_gecko_bootloader(
-                            run_firmware=False,
-                            baudrate=baudrates[ApplicationType.GECKO_BOOTLOADER][0]
-                        )
-                        self.log("✓ 成功！通过硬件复位进入引导模式")
-                        # 设置设备类型为引导模式
-                        flasher.app_type = ApplicationType.GECKO_BOOTLOADER
-                        flasher.app_baudrate = baudrates[ApplicationType.GECKO_BOOTLOADER][0]
-                        flasher.bootloader_baudrate = baudrates[ApplicationType.GECKO_BOOTLOADER][0]
-                        self.log("")
-                        self.log("可以继续烧录固件了")
-                        # 跳过后续的enter_bootloader调用，因为已经在引导模式了
-                        flasher._skip_enter_bootloader = True
-                    except Exception as probe_error:
-                        self.log(f"⚠ 硬件复位后探测仍然失败: {probe_error}")
-                        self.log("")
-                        self.log("可能的解决方案：")
-                        self.log("1. 检查设备硬件连接（USB线、端口）")
-                        self.log("2. 尝试重新插拔USB设备")
-                        self.log("3. 某些设备可能需要按住Boot按钮并重启")
-                        self.log("4. 检查设备驱动程序是否正确安装")
-                        self.log("5. 尝试使用其他串口工具验证设备是否响应")
-                        self.update_progress(0, "硬件复位后探测失败")
-                        return
-                except Exception as reset_error:
-                    self.log(f"✗ 硬件复位失败: {reset_error}")
-                    self.log("")
-                    self.log("硬件复位也需要稳定的串口连接")
-                    self.log("请检查USB连接和驱动程序")
-                    self.update_progress(0, "硬件复位失败")
-                    return
-            
-            elif probe_method_type in (ApplicationType.CPC, ApplicationType.ROUTER):
-                # CPC或Router模式探测失败 - 尝试硬件复位
-                self.log("")
-                self.log("检测到：固件通信问题")
-                self.log("")
-                self.log("正在尝试使用RTS/DTR硬件复位强制进入引导模式...")
-                self.log("")
-                
-                try:
-                    from universal_silabs_flasher.const import ResetTarget
-                    # 尝试使用RTS/DTR硬件复位
-                    await flasher.trigger_bootloader(ResetTarget.RTS_DTR)
-                    await asyncio.sleep(1.0)  # 给设备时间进入引导模式
-                    
-                    # 再次尝试探测引导模式
-                    self.log("硬件复位完成，重新探测引导模式...")
-                    try:
-                        await flasher.probe_gecko_bootloader(
-                            run_firmware=False,
-                            baudrate=baudrates[ApplicationType.GECKO_BOOTLOADER][0]
-                        )
-                        self.log("✓ 成功！通过硬件复位进入引导模式")
-                        # 设置设备类型为引导模式
-                        flasher.app_type = ApplicationType.GECKO_BOOTLOADER
-                        flasher.app_baudrate = baudrates[ApplicationType.GECKO_BOOTLOADER][0]
-                        flasher.bootloader_baudrate = baudrates[ApplicationType.GECKO_BOOTLOADER][0]
-                        self.log("")
-                        self.log("可以继续烧录固件了")
-                        # 跳过后续的enter_bootloader调用，因为已经在引导模式了
-                        flasher._skip_enter_bootloader = True
-                    except Exception as probe_error:
-                        self.log(f"⚠ 硬件复位后探测仍然失败: {probe_error}")
-                        self.log("")
-                        self.log("可能的解决方案：")
-                        self.log("1. 检查设备硬件连接（USB线、端口）")
-                        self.log("2. 尝试重新插拔USB设备")
-                        self.log("3. 某些设备可能需要按住Boot按钮并重启")
-                        self.log("4. 检查设备驱动程序是否正确安装")
-                        self.log("5. 尝试使用其他串口工具验证设备是否响应")
-                        self.update_progress(0, "硬件复位后探测失败")
-                        return
-                except Exception as reset_error:
-                    self.log(f"✗ 硬件复位失败: {reset_error}")
-                    self.log("")
-                    self.log("硬件复位也需要稳定的串口连接")
-                    self.log("请检查USB连接和驱动程序")
-                    self.update_progress(0, "硬件复位失败")
-                    return
-            
-            else:
-                self.log("")
-                self.log("建议尝试以下方法：")
-                self.log("1. 检查设备连接和电源")
-                self.log("2. 重新插拔USB设备")
-                self.log("3. 尝试其他探测方法（如bootloader或cpc）")
-                self.log("4. 检查串口驱动和权限")
-            
-            if probe_method_type not in (ApplicationType.GECKO_BOOTLOADER, ApplicationType.CPC, ApplicationType.ROUTER):
-                self.update_progress(0, "设备探测失败")
-                return
-        
-        self.log(f"检测到设备类型: {flasher.app_type}")
-        
-        # 检查是否已经通过硬件复位进入引导模式
-        if hasattr(flasher, '_skip_enter_bootloader') and flasher._skip_enter_bootloader:
-            # 已经在引导模式了（通过硬件复位进入的）
-            self.log("设备已在引导模式（通过硬件复位）")
-            delattr(flasher, '_skip_enter_bootloader')
-        else:
-            if flasher.app_version:
-                self.log(f"当前固件版本: {flasher.app_version}")
-            self.log(f"应用波特率: {flasher.app_baudrate}")
-            
-            # 进入引导模式
-            self.log("进入引导模式...")
-            try:
-                await flasher.enter_bootloader()
-                self.log("成功进入引导模式")
-            except Exception as e:
-                self.log(f"进入引导模式失败: {e}")
-                self.update_progress(0, "进入引导模式失败")
-                return
+            await flasher.trigger_bootloader(ResetTarget.RTS_DTR)
+            # Mark current state so we avoid full app probing in enter_bootloader().
+            flasher.app_type = ApplicationType.GECKO_BOOTLOADER
+            flasher.app_baudrate = baudrates[ApplicationType.GECKO_BOOTLOADER][0]
+            flasher.bootloader_baudrate = baudrates[ApplicationType.GECKO_BOOTLOADER][0]
+        except Exception as e:
+            self.log(f"进入引导模式失败: {e}")
+            self.update_progress(0, "进入引导模式失败")
+            return
+
+        # 直接进入引导模式后执行bootloader烧录
+        self.log("进入引导模式...")
+        try:
+            await flasher.enter_bootloader()
+            self.log("成功进入引导模式")
+        except Exception as e:
+            self.log(f"进入引导模式失败: {e}")
+            self.update_progress(0, "进入引导模式失败")
+            return
         
         # 烧录固件
         self.log("开始烧录固件...")
