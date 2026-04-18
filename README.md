@@ -19,10 +19,10 @@ This project is based on the open-source `universal-silabs-flasher` project with
   - `thread-rcp/` – OpenThread RCP firmware  
   - `multipan/` – Multi-PAN CPC firmware  
   - Typical subdirectories: `ZBM-MG21/`, `ZBM-MG24/`, etc., representing different chip platforms/products.  
-    Example filenames:
-    - `zigbee-ncp/ZBM-MG24/ncp_uart_hw_dongle_v8.2.1.0.gbl`  
-    - `thread-rcp/ZBM-MG21/ot-rcp_dongle_v2.6.1.0.gbl`  
-    - `multipan/ZBM-MG24/rcp-uart_dongle_v4.6.0.gbl`
+    Filenames are typically `{prefix}_dongle_{version}_{uart_baud}.gbl`; the trailing `_115200` or `_460800` is the default UART baud rate for that image. Examples:
+    - `zigbee-ncp/ZBM-MG24/ncp-uart_dongle_v8.2.1.0_115200.gbl`  
+    - `thread-rcp/ZBM-MG21/ot-rcp_dongle_v2.6.1.0_460800.gbl`  
+    - `multipan/ZBM-MG24/rcp-uart_dongle_v4.6.0_115200.gbl`
 
 - **`src/`** – Source code and build scripts for the flasher tool  
   - `gui_app.py` – Tkinter-based GUI entry point  
@@ -111,10 +111,10 @@ The `firmware_bin/` folder is organized for quick selection of the correct image
   - Subdirectories such as `ZBM-MG21/`, `ZBM-MG24/` correspond to different chip platforms or product SKUs.
 
 - **File naming (examples)**:  
-  - `ncp_uart_hw_dongle_v8.2.1.0.gbl` – Zigbee NCP firmware, version v8.2.1.0  
-  - `ot-rcp_dongle_v2.6.1.0.gbl` – OpenThread RCP firmware, version v2.6.1.0  
-  - `light_devtype_dongle_v8.0.2.0.gbl` – Zigbee Router (light device type) firmware, version v8.0.2.0  
-  - `rcp-uart_dongle_v4.6.0.gbl` – Multi-PAN CPC RCP firmware, version v4.6.0
+  - `ncp-uart_dongle_v8.2.1.0_115200.gbl` – Zigbee NCP firmware, v8.2.1.0, default UART 115200  
+  - `ot-rcp_dongle_v2.6.1.0_460800.gbl` – OpenThread RCP firmware, v2.6.1.0, default UART 460800  
+  - `light_devtype_dongle_v8.0.2.0_115200.gbl` – Zigbee Router (light device type) firmware, v8.0.2.0, default UART 115200  
+  - `rcp-uart_dongle_v4.6.0_115200.gbl` – Multi-PAN CPC RCP firmware, v4.6.0, default UART 115200
 
 Before flashing, always confirm:
 

@@ -16,10 +16,10 @@ Inswift Silabs Flasher 是一款基于 Windows 的图形化固件烧录工具，
   - `zigbee-router/`：Zigbee Router 固件  
   - `thread-rcp/`：OpenThread RCP 固件  
   - `multipan/`：CPC Multi-PAN 固件  
-  - 典型子目录示例：`ZBM-MG21/`、`ZBM-MG24/` 等，以具体产品/芯片平台区分；文件名中包含协议类型与版本号，例如：
-    - `zigbee-ncp/ZBM-MG24/ncp_uart_hw_dongle_v8.2.1.0.gbl`
-    - `thread-rcp/ZBM-MG21/ot-rcp_dongle_v2.6.1.0.gbl`
-    - `multipan/ZBM-MG24/rcp-uart_dongle_v4.6.0.gbl`
+  - 典型子目录示例：`ZBM-MG21/`、`ZBM-MG24/` 等，以具体产品/芯片平台区分；文件名一般为 `{协议前缀}_dongle_{版本}_{串口波特率}.gbl`，末尾 `_115200` / `_460800` 表示该镜像默认 UART 波特率，例如：
+    - `zigbee-ncp/ZBM-MG24/ncp-uart_dongle_v8.2.1.0_115200.gbl`
+    - `thread-rcp/ZBM-MG21/ot-rcp_dongle_v2.6.1.0_460800.gbl`
+    - `multipan/ZBM-MG24/rcp-uart_dongle_v4.6.0_115200.gbl`
 
 - **`src/`**：烧录工具的源代码与构建脚本  
   - `gui_app.py`：GUI 程序入口（Tkinter 图形界面）  
@@ -108,10 +108,10 @@ build_windows.bat
   - 如 `ZBM-MG21/`、`ZBM-MG24/` 等目录，代表不同芯片平台或产品型号
 
 - **文件命名约定（示例）**：  
-  - `ncp_uart_hw_dongle_v8.2.1.0.gbl`：Zigbee NCP 固件，v8.2.1.0 版本  
-  - `ot-rcp_dongle_v2.6.1.0.gbl`：OpenThread RCP 固件，v2.6.1.0 版本  
-  - `light_devtype_dongle_v8.0.2.0.gbl`：Zigbee Router 固件（灯设备类型），v8.0.2.0 版本  
-  - `rcp-uart_dongle_v4.6.0.gbl`：Multi-PAN CPC RCP 固件，v4.6.0 版本
+  - `ncp-uart_dongle_v8.2.1.0_115200.gbl`：Zigbee NCP 固件，v8.2.1.0，默认串口 115200  
+  - `ot-rcp_dongle_v2.6.1.0_460800.gbl`：OpenThread RCP 固件，v2.6.1.0，默认串口 460800  
+  - `light_devtype_dongle_v8.0.2.0_115200.gbl`：Zigbee Router 固件（灯设备类型），v8.0.2.0，默认串口 115200  
+  - `rcp-uart_dongle_v4.6.0_115200.gbl`：Multi-PAN CPC RCP 固件，v4.6.0，默认串口 115200
 
 在烧录前，请确保：
 
