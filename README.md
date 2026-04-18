@@ -4,6 +4,10 @@ Inswift Silabs Flasher is a Windows GUI tool for flashing firmware to Silicon La
 It supports multiple protocols (Zigbee NCP, Zigbee Router, OpenThread RCP, Multi-PAN CPC, etc.) and is optimized for the Inswift range of USB dongle products.  
 This project is based on the open-source `universal-silabs-flasher` project with an **English**-language Tkinter GUI and workflow enhancements.
 
+## GUI firmware burning guide
+
+
+
 ## Repository Layout
 
 - **`doc/`** – Environment setup, build guides, GUI usage manuals and future operational guides  
