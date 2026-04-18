@@ -1,5 +1,7 @@
 # Inswift Silabs Flasher GUI - User Guide
 
+The application window, controls, dialogs, and on-screen log are **English**. This guide matches the exact control labels where relevant.
+
 ## Detailed Usage Steps
 
 ### 1. Connect the Device
@@ -20,18 +22,18 @@
 
 ### 4. Configure the Device
 
-#### Device Port
+#### Device Port (label **Serial port:**)
 - **Auto Scan**: The application automatically scans available serial ports on startup and lists them in the dropdown
 - **Select Port**: Choose your device port from the dropdown (e.g., COM1, COM3)
-- **Refresh Scan**: Click the "Refresh" button to rescan available serial ports
+- **Refresh Scan**: Click **Refresh** to rescan available serial ports
 - **Manual Entry**: If no port is detected, you can enter the port name manually
 - **Windows Check**: In Windows Device Manager, check "Ports (COM & LPT)" to confirm the port number
 
 #### Device Type Probe (Standalone Feature)
-The GUI now uses a separated workflow:
+The GUI uses a separated workflow:
 
-- `Probe Device Type`: probe only, no flashing
-- `Start Flashing`: flash only, no pre-probe
+- **Probe device**: probe only, no flashing (gray hint: *Probe order (Probe device only): …*)
+- **Start flashing**: flash only, no pre-probe
 
 Fixed probe order: `EZSP -> ROUTER -> RCP(SPINEL) -> CPC`
 
@@ -46,7 +48,7 @@ Fixed probe baud rates:
 
 ### 5. Start Flashing
 
-1. Click the "Start Flashing" button
+1. Click **Start flashing**
 2. The app enters bootloader directly (no device type probe)
 3. Watch the log output
 4. Wait for flashing to complete
@@ -66,17 +68,17 @@ The application will automatically perform the following steps:
 ```
 
 **Progress Display**:
-- **Progress Bar**: Shows flashing progress in real time, updated every 1%
-- **Log Window**: Shows detailed progress every 1%
-  - Format: `Flashing progress: X% (X.XXMB / X.XXMB)`
-  - Example: `Flashing progress: 45% (1.23MB / 2.75MB)`
+- **Progress bar** (section **Flash progress:**): updates in real time, about every 1%
+- **Log**: detailed progress about every 1%
+  - Format: `Flash progress: X% (X.XX MB / X.XX MB)`
+  - Example: `Flash progress: 45% (1.23 MB / 2.75 MB)`
 
 ### 7. Device Type Probe (Optional)
 
 To identify the running device type only:
 
 1. Connect device and select serial port
-2. Click `Probe Device Type`
+2. Click **Probe device**
 3. Check logs for detected type/version/app baud rate
 
 Notes:
@@ -92,19 +94,19 @@ To set a specific IEEE address for the device, use the Write IEEE Address featur
    - This feature only supports EmberZNet devices
    - If the device runs other firmware types, this feature will not be available
 
-2. Enter the IEEE address in the "5. Write IEEE Address" section
+2. Enter the IEEE address under **5. Write IEEE (EUI-64):**
    - Format 1: `00:3c:84:ff:fe:92:bb:2c` (with colon separators)
    - Format 2: `003c84fffe92bb2c` (no colons, 16 hex digits)
    - Both formats are supported
 
-3. (Optional) Check the "Force Write" checkbox
+3. (Optional) Check **Force overwrite**
    - Unchecked by default: skips writing if the address already matches
    - Checked: forces write even when the address already matches
 
-4. Click the "Write IEEE Address" button
+4. Click **Write IEEE**
 
 5. Confirm the operation
-   - A confirmation dialog will appear
+   - A **Confirm** dialog will appear
    - ⚠️ **Warning**: On some firmware versions, writing the IEEE address is a **permanent** operation and cannot be undone
    - After confirming, the write will begin
 
@@ -183,14 +185,14 @@ To set a specific IEEE address for the device, use the Write IEEE Address featur
 - Other firmware types (e.g., CPC, Spinel) do not support this feature
 
 **Steps**:
-1. Enter the IEEE address in the "5. Write IEEE Address" section
-2. (Optional) Check "Force Write"
-3. Click the "Write IEEE Address" button
+1. Enter the IEEE address under **5. Write IEEE (EUI-64):**
+2. (Optional) Check **Force overwrite**
+3. Click **Write IEEE**
 4. Confirm the operation
 
 **Common Errors**:
-- "Device is not running EmberZNet firmware": The current firmware type is not supported; flash EmberZNet firmware first
-- "Invalid IEEE address format": Check the format; it must be 8 bytes in hexadecimal
+- Log: `Error: device is not running EmberZNet; cannot write IEEE` — flash EmberZNet (EZSP) firmware first
+- Dialog **Error** / `Invalid IEEE address`: check the format; it must be 8 bytes in hexadecimal
 
 ### Q8: Device Type Probe Is Slow or Fails
 
@@ -199,8 +201,8 @@ To set a specific IEEE address for the device, use the Write IEEE Address featur
 - Probe baud rates are fixed: `SPINEL=460800`, all others `115200`
 
 **Recommendations**:
-1. Use `Start Flashing` directly for daily upgrades
-2. Use `Probe Device Type` only when you need diagnostics
+1. Use **Start flashing** directly for daily upgrades
+2. Use **Probe device** only when you need diagnostics
 3. If probe fails but flashing works, proceed with flashing
 
 ### Q9: Cannot Enter Bootloader Again After Flashing Router Firmware
@@ -244,7 +246,7 @@ The application handles this automatically:
 
 **If probe fails** (device not communicating):
 1. Probe is identification only and does not trigger flashing
-2. You can still click `Start Flashing` directly
+2. You can still click **Start flashing** directly
 3. If needed, replug the device and retry flashing
 
 3. **If Hardware Reset Also Fails**:

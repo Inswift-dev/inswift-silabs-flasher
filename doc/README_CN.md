@@ -1,7 +1,7 @@
 ## 项目简介
 
 Inswift Silabs Flasher 是一款基于 Windows 的图形化固件烧录工具，用于给 Silicon Labs 平台的无线芯片/模组烧录多种协议固件（Zigbee NCP、Zigbee Router、OpenThread RCP、Multi-PAN CPC 等）。  
-本工程在开源项目 `universal-silabs-flasher` 的基础上进行了本地化与功能增强，配套 Inswift 系列 USB Dongle 产品使用。
+本工程在开源项目 `universal-silabs-flasher` 的基础上增加了 **英文界面与英文运行日志** 的图形工具、配套文档与功能增强，适用于 Inswift 系列 USB Dongle 产品。
 
 ## 仓库目录结构
 
@@ -83,11 +83,11 @@ build_windows.bat
 
 1. 使用 USB 线将 Inswift Dongle（如 ZBM-MG21 / ZBM-MG24 等）连接到电脑  
 2. 启动工具：双击 `InswiftSilabsFlasher.exe`（来自 `dist\` 或 `tools\` 目录）  
-3. 在 GUI 中：
-   - 选择固件文件（`firmware_bin/` 目录下对应协议和型号的 `.gbl` 文件）  
-   - 选择串口号（自动扫描或手动输入，如 COM3）  
-   - （可选）点击“探测设备类型”做设备识别（只探测不烧录）  
-   - 点击 “开始烧录”直接烧录（不做前置类型探测），观察进度条与日志输出
+3. 在 GUI 中（界面与 **Log** 为英文）：
+   - 选择固件文件（`firmware_bin/` 目录下对应协议和型号的 `.gbl` 文件，**Browse...**）  
+   - 选择串口号（**Serial port:**，自动扫描或手动输入，如 COM3；可点 **Refresh**）  
+   - （可选）点击 **Probe device** 做设备识别（只探测不烧录）  
+   - 点击 **Start flashing** 直接烧录（不做前置类型探测），观察 **Flash progress:** 与 **Log** 输出
 
 详细的按钮说明、进度显示、写入 IEEE 地址等高级功能，请参考：
 
@@ -123,10 +123,10 @@ build_windows.bat
 - 本工程的核心烧录逻辑来自开源项目 **Universal Silabs Flasher**：  
   - GitHub 仓库：`https://github.com/NabuCasa/universal-silabs-flasher`
 - 本仓库在其基础上做了以下工作：  
-  - 增加 Windows 图形化界面（`src/gui_app.py`，Tkinter）  
+  - 增加 Windows 图形化界面（`src/gui_app.py`，Tkinter；**界面与日志为英文**）  
   - 封装一键打包脚本 `src/build_windows.bat` 以及对应的 PyInstaller spec 文件  
   - 提供针对 Inswift 系列 Dongle 的固件打包与目录组织  
-  - 增强部分探测/复位逻辑以及更友好的中文提示与文档
+  - 增强部分探测/复位逻辑；配套 **中文/英文** 使用说明文档（`doc/`）
 
 许可证相关信息请参考上游仓库及本工程的 `pyproject.toml` / 后续 LICENSE 文件。
 

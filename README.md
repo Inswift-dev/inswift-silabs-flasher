@@ -2,7 +2,7 @@
 
 Inswift Silabs Flasher is a Windows GUI tool for flashing firmware to Silicon Labs-based wireless chips/dongles.  
 It supports multiple protocols (Zigbee NCP, Zigbee Router, OpenThread RCP, Multi-PAN CPC, etc.) and is optimized for the Inswift range of USB dongle products.  
-This project is based on the open-source `universal-silabs-flasher` project with localized GUI and workflow enhancements.
+This project is based on the open-source `universal-silabs-flasher` project with an **English**-language Tkinter GUI and workflow enhancements.
 
 ## Repository Layout
 
@@ -89,8 +89,8 @@ Typical flashing workflow:
 3. In the GUI:
    - Select a firmware file (`.gbl`) from the appropriate subdirectory under `firmware_bin/`  
    - Select the serial port (auto-scanned or manually entered, e.g., COM3)  
-   - (Optional) Click **Probe Device Type** for identification only (no flashing)  
-   - Click **Start Flashing** for direct flashing (no pre-probe in flashing flow)
+   - (Optional) Click **Probe device** for identification only (no flashing)  
+   - Click **Start flashing** for direct flashing (no pre-probe in flashing flow)
 
 For detailed button descriptions, progress behavior, and advanced features such as writing IEEE addresses, please refer to:
 
@@ -127,10 +127,10 @@ Before flashing, always confirm:
   - GitHub: [NabuCasa/universal-silabs-flasher (upstream)](https://github.com/NabuCasa/universal-silabs-flasher)
 
 - This repository adds:  
-  - A localized Windows GUI (`src/gui_app.py`, Tkinter-based)  
+  - A Windows GUI in English (`src/gui_app.py`, Tkinter-based)  
   - Convenience build script `src/build_windows.bat` and PyInstaller spec file  
   - Firmware packaging and directory layout tailored for Inswift dongle products  
-  - Enhanced probe/reset logic and more user-friendly messages/logging
+  - Enhanced probe/reset logic and clearer logging (English in the GUI)
 
 For license details, please refer to the upstream repository and this project’s `pyproject.toml` and future LICENSE file.
 
