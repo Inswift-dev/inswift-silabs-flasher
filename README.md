@@ -89,8 +89,8 @@ Typical flashing workflow:
 3. In the GUI:
    - Select a firmware file (`.gbl`) from the appropriate subdirectory under `firmware_bin/`  
    - Select the serial port (auto-scanned or manually entered, e.g., COM3)  
-   - Choose the probe method (`ezsp`, `router`, `bootloader`, `cpc`, or `spinel`)  
-   - Click **Start Flashing** and monitor the progress bar and log window
+   - (Optional) Click **Probe Device Type** for identification only (no flashing)  
+   - Click **Start Flashing** for direct flashing (no pre-probe in flashing flow)
 
 For detailed button descriptions, progress behavior, and advanced features such as writing IEEE addresses, please refer to:
 

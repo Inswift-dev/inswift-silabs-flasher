@@ -27,22 +27,29 @@
 - **Manual Entry**: If no port is detected, you can enter the port name manually
 - **Windows Check**: In Windows Device Manager, check "Ports (COM & LPT)" to confirm the port number
 
-#### Probe Method
-Choose the appropriate probe method for your device type:
+#### Device Type Probe (Standalone Feature)
+The GUI now uses a separated workflow:
 
-| Probe Method | Description | Default Baud Rate |
-|--------------|-------------|-------------------|
-| ezsp | EmberZNet protocol (Zigbee NCP) | 115200 |
-| router | Zigbee Router | 115200 |
-| bootloader | Bootloader mode | 115200 |
-| cpc | CPC Multi-PAN | 115200 |
-| spinel | RCP OPENTHREAD | 460800 |
+- `Probe Device Type`: probe only, no flashing
+- `Start Flashing`: flash only, no pre-probe
+
+Fixed probe order: `EZSP -> ROUTER -> RCP(SPINEL) -> CPC`
+
+Fixed probe baud rates:
+
+| Type | Baud Rate |
+|------|-----------|
+| EZSP | 115200 |
+| ROUTER | 115200 |
+| CPC | 115200 |
+| SPINEL (RCP) | 460800 |
 
 ### 5. Start Flashing
 
 1. Click the "Start Flashing" button
-2. Watch the log output
-3. Wait for the flashing to complete
+2. The app enters bootloader directly (no device type probe)
+3. Watch the log output
+4. Wait for flashing to complete
 
 ### 6. Flashing Process
 
@@ -52,11 +59,10 @@ The application will automatically perform the following steps:
 1. Read firmware file ✓
 2. Parse firmware info ✓
 3. Connect to device ✓
-4. Probe device type ✓
-5. Check firmware version ✓
-6. Enter bootloader mode ✓
-7. Flash firmware... (progress shown, updated every 1%)
-8. Start new firmware ✓
+4. Trigger bootloader mode (RTS/DTR) ✓
+5. Enter bootloader mode ✓
+6. Flash firmware... (progress shown, updated every 1%)
+7. Start new firmware ✓
 ```
 
 **Progress Display**:
@@ -65,7 +71,19 @@ The application will automatically perform the following steps:
   - Format: `Flashing progress: X% (X.XXMB / X.XXMB)`
   - Example: `Flashing progress: 45% (1.23MB / 2.75MB)`
 
-### 7. Write IEEE Address (Optional)
+### 7. Device Type Probe (Optional)
+
+To identify the running device type only:
+
+1. Connect device and select serial port
+2. Click `Probe Device Type`
+3. Check logs for detected type/version/app baud rate
+
+Notes:
+- This action does not start flashing
+- Probe failure does not block direct flashing
+
+### 8. Write IEEE Address (Optional)
 
 To set a specific IEEE address for the device, use the Write IEEE Address feature:
 
@@ -174,7 +192,18 @@ To set a specific IEEE address for the device, use the Write IEEE Address featur
 - "Device is not running EmberZNet firmware": The current firmware type is not supported; flash EmberZNet firmware first
 - "Invalid IEEE address format": Check the format; it must be 8 bytes in hexadecimal
 
-### Q8: Cannot Enter Bootloader Again After Flashing Router Firmware
+### Q8: Device Type Probe Is Slow or Fails
+
+**Notes**:
+- Device type probe is now standalone and does not affect flashing
+- Probe baud rates are fixed: `SPINEL=460800`, all others `115200`
+
+**Recommendations**:
+1. Use `Start Flashing` directly for daily upgrades
+2. Use `Probe Device Type` only when you need diagnostics
+3. If probe fails but flashing works, proceed with flashing
+
+### Q9: Cannot Enter Bootloader Again After Flashing Router Firmware
 
 **Description**:
 - After flashing Router firmware, re-flashing shows "Failed to enter bootloader"
@@ -195,7 +224,7 @@ The application handles this automatically:
 - Ensure a stable USB connection; hardware reset needs a stable serial link
 - If both methods fail, check the device hardware or try unplugging and replugging the USB device
 
-### Q9: Cannot Probe or Enter Bootloader Again After Flashing Multi-PAN (CPC) Firmware
+### Q10: Cannot Probe or Enter Bootloader Again After Flashing Multi-PAN (CPC) Firmware
 
 **Description**:
 - After flashing Multi-PAN (CPC) firmware, re-flashing shows "Device probe failed" or "Failed to enter bootloader"
@@ -213,17 +242,10 @@ The application handles this automatically:
    - `"CPC bootloader command failed. Attempting RTS/DTR hardware reset as fallback..."`
    - `"Successfully entered bootloader using RTS/DTR reset"`
 
-**If Probe Fails** (device not communicating):
-1. **Automatic Hardware Reset**: The application handles this case
-   - When probe method is `bootloader`, `cpc`, or `router` and probe fails, the application **automatically tries RTS/DTR hardware reset**
-   - If hardware reset succeeds, the application continues the flashing process
-   - This is a "last resort" and often recovers devices that cannot communicate
-
-2. **Manual Steps**:
-   - **Step 1**: In the GUI, set probe method to `cpc`, `router`, or `bootloader`
-   - **Step 2**: Click "Start Flashing"; the application will try to probe the device
-   - **Step 3**: If probe fails, it will automatically try hardware reset (you will see: "Attempting RTS/DTR hardware reset...")
-   - **Step 4**: Wait for hardware reset to finish; the application will re-probe bootloader mode and continue flashing
+**If probe fails** (device not communicating):
+1. Probe is identification only and does not trigger flashing
+2. You can still click `Start Flashing` directly
+3. If needed, replug the device and retry flashing
 
 3. **If Hardware Reset Also Fails**:
    - Unplug and replug the USB device (after hardware reset)
@@ -234,17 +256,9 @@ The application handles this automatically:
    - Try other serial tools (e.g., PuTTY, serial terminal) to see if the device responds
 
 **Notes**:
-- ✅ **Handled Automatically**: With `bootloader` probe method, failed probe triggers an automatic hardware reset attempt
-- Ensure a stable USB connection; hardware reset needs a stable serial link
-- If the device does not communicate at all, the firmware may be corrupted
-- In some cases, a specific hardware reset (e.g., holding Boot and restarting) may be needed
-
-**Important**:
-- ✅ **Automatic**: When CPC, Router, or Bootloader probe fails, the application **automatically tries RTS/DTR hardware reset**
-- ✅ **Unified**: CPC, Router, and Bootloader all use the same automatic hardware reset on failure
-- Wait for the hardware reset to complete (usually 1–2 seconds)
-- After hardware reset, the application will re-probe bootloader and continue
-- On success, the log will show: "✓ Success! Entered bootloader via hardware reset"
+- Probe failure does not necessarily mean flash failure
+- Probe and flash workflows are separated
+- Keep USB connection stable; replug if needed
 
 ## Supported Firmware Types
 
