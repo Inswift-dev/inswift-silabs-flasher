@@ -6,6 +6,8 @@ This project is based on the open-source `universal-silabs-flasher` project with
 
 ## GUI firmware burning guide
 
+https://github.com/user-attachments/assets/380f4530-56be-441b-a7d9-fb84d3109470
+
 
 
 ## Repository Layout
