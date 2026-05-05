@@ -146,7 +146,7 @@ Inswift dongle products are available on AliExpress and can be used with this to
 
 - **AliExpress Store**: [Inswift Official Store](https://www.aliexpress.com/store/1104754391?spm=a2g0o.store_pc_home.pcShopHead_2012127151152.0)
 
-![Inswift products (AliExpress)](https://github.com/user-attachments/assets/071c0c85-5bfe-46ff-87a0-144435ca8c0b)
+<img width="1000" height="1000" alt="dongle_series" src="https://github.com/user-attachments/assets/e72fdf8d-eca6-4a8d-b9ba-8e311c802f72" />
 
 
 For additional guidance or firmware updates, please watch for updates under the `doc/` directory or contact technical support via the AliExpress store.
