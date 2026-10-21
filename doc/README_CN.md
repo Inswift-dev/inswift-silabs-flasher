@@ -10,6 +10,7 @@ Inswift Silabs Flasher 是一款基于 Windows 的图形化固件烧录工具，
   - Build & environment (English)：[`doc/BUILD_EN.md`](doc/BUILD_EN.md)  
   - GUI 使用说明（中文）：[`doc/Inswift_Silabs_Flasher_GUI_CN.md`](doc/Inswift_Silabs_Flasher_GUI_CN.md)  
   - GUI User Guide (English)：[`doc/Inswift_Silabs_Flasher_GUI_EN.md`](doc/Inswift_Silabs_Flasher_GUI_EN.md)
+  - ZBM-MG dongle IO configuration (English)：[`doc/ZBM-MG_Hardware_IO_Pinout_EN.md`](doc/ZBM-MG_Hardware_IO_Pinout_EN.md)
 
 - **`firmware_bin/`**：产品出厂/维护时用于烧录的固件存放目录，已按协议和芯片型号划分子目录，所有固件目前均为 `.gbl` 格式  
   - `zigbee-ncp/`：Zigbee NCP 固件（适配 EmberZNet NCP 模式）  

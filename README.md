@@ -17,6 +17,7 @@ https://github.com/user-attachments/assets/380f4530-56be-441b-a7d9-fb84d3109470
   - Build & environment (English): [`doc/BUILD_EN.md`](doc/BUILD_EN.md)  
   - GUI User Guide (Chinese): [`doc/Inswift_Silabs_Flasher_GUI_CN.md`](doc/Inswift_Silabs_Flasher_GUI_CN.md)  
   - GUI User Guide (English): [`doc/Inswift_Silabs_Flasher_GUI_EN.md`](doc/Inswift_Silabs_Flasher_GUI_EN.md)
+  - ZBM-MG dongle IO configuration (English): [`doc/ZBM-MG_Hardware_IO_Pinout_EN.md`](doc/ZBM-MG_Hardware_IO_Pinout_EN.md)
 
 - **`firmware_bin/`** – Pre-built firmware images for production/maintenance flashing, organized by protocol and platform.  
   All firmware files are in `.gbl` format, grouped as:
