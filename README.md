@@ -128,6 +128,30 @@ Before flashing, always confirm:
 - The protocol type matches your use case (e.g., NCP for coordinator/gateway, Router for router nodes).  
 - The firmware version is compatible with your gateway software and network requirements.
 
+## Community Firmware Builds
+
+In addition to the firmware images shipped under `firmware_bin/`, newer community-built firmware for Inswift ZBM-MG21 and ZBM-MG24 dongles is available from the [Nerivec/silabs-firmware-builder](https://github.com/Nerivec/silabs-firmware-builder) project.
+
+**Latest pre-release (v2026.6.2-pre1):**  
+[https://github.com/Nerivec/silabs-firmware-builder/releases/tag/v2026.6.2-pre1](https://github.com/Nerivec/silabs-firmware-builder/releases/tag/v2026.6.2-pre1)
+
+**Available Inswift firmware assets:**
+
+- **ZBM-MG21**:
+  - `inswift_zbm-mg21_zigbee_ncp_2026.6.2_9.1.2_115200_sw_flow.gbl` – Zigbee NCP, 115200 baud, software flow control
+  - `inswift_zbm-mg21_zigbee_router_2026.6.2_9.1.2_115200_no_flow.gbl` – Zigbee Router, 115200 baud, no flow control
+  - `inswift_zbm-mg21_openthread_rcp_2026.6.2_3.1.2_460800_sw_flow.gbl` – OpenThread RCP, 460800 baud, software flow control
+
+- **ZBM-MG24**:
+  - `inswift_zbm-mg24_zigbee_ncp_2026.6.2_9.1.2_460800_sw_flow.gbl` – Zigbee NCP, 460800 baud, software flow control
+  - `inswift_zbm-mg24_zigbee_router_2026.6.2_9.1.2_115200_no_flow.gbl` – Zigbee Router, 115200 baud, no flow control
+  - `inswift_zbm-mg24_openthread_rcp_2026.6.2_3.1.2_460800_sw_flow.gbl` – OpenThread RCP, 460800 baud, software flow control
+
+These are community builds from [Nerivec/silabs-firmware-builder](https://github.com/Nerivec/silabs-firmware-builder). To use them:
+
+1. Download the `.gbl` file for your dongle model and use case from the release page.
+2. Flash the downloaded `.gbl` file using this GUI tool, following the same procedure as for files under `firmware_bin/`.
+
 ## Upstream Project & Licensing
 
 - The core flashing logic is derived from the open-source project **Universal Silabs Flasher**:  

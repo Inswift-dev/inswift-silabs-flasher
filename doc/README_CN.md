@@ -119,6 +119,30 @@ build_windows.bat
 - 选择的固件协议类型与实际用途匹配（如网关使用 NCP，路由器使用 Router 固件等）  
 - 版本号符合项目/网关软件的兼容性要求
 
+## 社区固件构建
+
+除了 `firmware_bin/` 目录下提供的固件镜像外，Inswift ZBM-MG21 与 ZBM-MG24 Dongle 还可使用来自 [Nerivec/silabs-firmware-builder](https://github.com/Nerivec/silabs-firmware-builder) 项目的更新社区构建固件。
+
+**最新预发布版本（v2026.6.2-pre1）：**  
+[https://github.com/Nerivec/silabs-firmware-builder/releases/tag/v2026.6.2-pre1](https://github.com/Nerivec/silabs-firmware-builder/releases/tag/v2026.6.2-pre1)
+
+**可用的 Inswift 固件文件：**
+
+- **ZBM-MG21**：
+  - `inswift_zbm-mg21_zigbee_ncp_2026.6.2_9.1.2_115200_sw_flow.gbl` – Zigbee NCP，115200 波特率，软件流控
+  - `inswift_zbm-mg21_zigbee_router_2026.6.2_9.1.2_115200_no_flow.gbl` – Zigbee Router，115200 波特率，无流控
+  - `inswift_zbm-mg21_openthread_rcp_2026.6.2_3.1.2_460800_sw_flow.gbl` – OpenThread RCP，460800 波特率，软件流控
+
+- **ZBM-MG24**：
+  - `inswift_zbm-mg24_zigbee_ncp_2026.6.2_9.1.2_460800_sw_flow.gbl` – Zigbee NCP，460800 波特率，软件流控
+  - `inswift_zbm-mg24_zigbee_router_2026.6.2_9.1.2_115200_no_flow.gbl` – Zigbee Router，115200 波特率，无流控
+  - `inswift_zbm-mg24_openthread_rcp_2026.6.2_3.1.2_460800_sw_flow.gbl` – OpenThread RCP，460800 波特率，软件流控
+
+这些是来自 [Nerivec/silabs-firmware-builder](https://github.com/Nerivec/silabs-firmware-builder) 的社区构建固件。使用方法：
+
+1. 从发布页面下载适合您的 Dongle 型号和使用场景的 `.gbl` 文件。
+2. 使用本 GUI 工具烧录下载的 `.gbl` 文件，操作流程与烧录 `firmware_bin/` 目录下的固件文件相同。
+
 ## 源码来源与开源说明
 
 - 本工程的核心烧录逻辑来自开源项目 **Universal Silabs Flasher**：  
