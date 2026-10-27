@@ -20,6 +20,11 @@
 - 选择 `.gbl` 格式的固件文件
 - 支持的设备类型会在日志中显示
 
+**固件来源：**
+
+- 使用 `firmware_bin/` 目录下的固件文件，或
+- 从 [Nerivec/silabs-firmware-builder releases](https://github.com/Nerivec/silabs-firmware-builder/releases) 下载 ZBM-MG21 / ZBM-MG24 的更新社区构建固件（详细信息和直接链接请参见主 README 中的[社区固件构建](../README_CN.md#社区固件构建)章节）。
+
 ### 4. 配置设备
 
 #### 设备端口（界面标签为 **Serial port:**）

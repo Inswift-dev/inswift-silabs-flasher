@@ -20,6 +20,11 @@ The application window, controls, dialogs, and on-screen log are **English**. Th
 - Select a firmware file in `.gbl` format
 - Supported device types will be shown in the log
 
+**Firmware sources:**
+
+- Use firmware files from the `firmware_bin/` directory, or
+- Download newer community-built firmware for ZBM-MG21 / ZBM-MG24 from [Nerivec/silabs-firmware-builder releases](https://github.com/Nerivec/silabs-firmware-builder/releases) (see the [Community Firmware Builds](../README.md#community-firmware-builds) section in the main README for details and direct links).
+
 ### 4. Configure the Device
 
 #### Device Port (label **Serial port:**)
